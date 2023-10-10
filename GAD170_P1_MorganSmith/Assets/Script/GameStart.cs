@@ -59,14 +59,14 @@ public class GameStart : MonoBehaviour
         maxHealth = strength * 2;
         if (statPool > 0)//Checks to see if there are stat points left and displays how many are left
         {
-            displayText.stats = "Level: " + playerLevel + "\nEXP: " + playerExperience + "/" + playerMaxExperience + "\nStrength: " + strength + "\nDexterity: " + dexterity + "\nIntelligence: " + intelligence + "\nHealth: " + currentHealth + "/" + maxHealth + "\nGold: " + gold + "\nStat points: " + statPool;
+            displayText.playerStats = "Level: " + playerLevel + "\nEXP: " + playerExperience + "/" + playerMaxExperience + "\nStrength: " + strength + "\nDexterity: " + dexterity + "\nIntelligence: " + intelligence + "\nHealth: " + currentHealth + "/" + maxHealth + "\nGold: " + gold + "\nStat points: " + statPool;
         }
         else
         {
-            displayText.stats = "Level: " + playerLevel + "\nHealth: " + currentHealth + "/" + maxHealth + "\nEXP: " + playerExperience + "/" + playerMaxExperience + "\nStrength: " + strength + "\nDexterity: " + dexterity + "\nIntelligence: " + intelligence + "\nGold: " + gold;
+            displayText.playerStats = "Level: " + playerLevel + "\nHealth: " + currentHealth + "/" + maxHealth + "\nEXP: " + playerExperience + "/" + playerMaxExperience + "\nStrength: " + strength + "\nDexterity: " + dexterity + "\nIntelligence: " + intelligence + "\nGold: " + gold;
         }
 
-        if(currentHealth <= 0)//Makes sure you lose fi you have no health left
+        if (currentHealth <= 0)//Makes sure you lose fi you have no health left
         {
             GameOver();
         }
@@ -76,6 +76,8 @@ public class GameStart : MonoBehaviour
             playerExperience = playerMaxExperience;
         }
     }
+
+
 
     #region
     public void StatAllocation()

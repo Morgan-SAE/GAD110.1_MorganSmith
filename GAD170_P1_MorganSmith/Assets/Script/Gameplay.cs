@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,34 +10,36 @@ public class Gameplay : MonoBehaviour
     public RoomManager roomManager;
     public DisplayingText displayText;
     public ButtonInput buttonInput;
+    public int enemyMaxHealth;
+    public int enemyCurrentHealth;
+    public int enemyStrength;
+    public int enemyDexterity;
+    public int enemyDamage;
+    public int enemyMinDamage;
+    public int enemyMaxDamage;
+    public int enemyChanceToHit;
+    public int enemyLevel;
+    public int enemyLevelRange;
+    public int playerDamage;
+    public int playerMinDamage;
+    public int playerMaxDamage;
+    public int playerHeal;
+    public int playerMinHeal;
+    public int playerMaxHeal;
+    public int playerChanceToHit;
     // Start is called before the first frame update
     public void GameplayStart()
     {
         RemoveListeners();
-        int enemyHealth;
-        int enemyStrength;
-        int enemyDexterity;
-        int enemyDamage;
-        int enemyMinDamage;
-        int enemyMaxDamage;
-        int enemyChanceToHit;
-        int enemyLevel;
-        int enemyLevelRange;
-        int playerDamage;
-        int playerMinDamage;
-        int playerMaxDamage;
-        int playerHeal;
-        int playerMinHeal;
-        int playerMaxHeal;
-        int playerChanceToHit;
         enemyLevelRange = Mathf.CeilToInt(gameStart.playerLevel * 2.5f);
         enemyLevel = Random.Range(gameStart.playerLevel, enemyLevelRange);
         enemyStrength = 4 * enemyLevel;
         enemyDexterity = 3 * enemyLevel / 2;                            //<---Rolling of enemy stats
-        enemyHealth = (int)(enemyStrength * 1.2f);
+        enemyMaxHealth = (int)(enemyStrength * 1.2f);
+        enemyCurrentHealth = enemyMaxHealth;
         Debug.Log("Enemy Dex: " + enemyDexterity);
         Debug.Log("Enemy Strength: " + enemyStrength);
-        Debug.Log("Enemy Health: " + enemyHealth);
+        Debug.Log("Enemy Health: " + enemyMaxHealth);
 
 
         displayText.dialogue = "You are standing in a room, with a door infront of you\nDo you wish to enter?";
@@ -49,6 +52,9 @@ public class Gameplay : MonoBehaviour
         void StartCombat()
         {
             RemoveListeners();
+
+            displayText.enemyStats = "Goblin" + "\nLevel: " + enemyLevel + "\nHealth: " + enemyCurrentHealth + "/" + enemyMaxHealth + "\nStrength: " + enemyStrength + "\nDexterity: " + enemyDexterity;
+
             Debug.Log("A goblin has appeared!");
             displayText.dialogue = "You find a goblin, looking to attack you, what do you do?";
             displayText.bLText = "Attack";
@@ -79,7 +85,12 @@ public class Gameplay : MonoBehaviour
                 playerMaxDamage = Mathf.CeilToInt(gameStart.strength * 1.5f);
                 playerDamage = Random.Range(playerMinDamage, playerMaxDamage);
                 displayText.dialogue = "You deal " + playerDamage + " damage to the goblin.";
-                enemyHealth -= playerDamage;
+                enemyCurrentHealth -= playerDamage;
+                if (enemyCurrentHealth < 0)
+                {
+                    enemyCurrentHealth = 0;
+                }
+                displayText.enemyStats = "Goblin" + "\nLevel: " + enemyLevel + "\nHealth: " + enemyCurrentHealth + "/" + enemyMaxHealth + "\nStrength: " + enemyStrength + "\nDexterity: " + enemyDexterity;
                 Debug.Log("Player Damage: " + playerDamage);
                 StartCoroutine(EnemyHealthCheckWaiter());
             }
@@ -101,7 +112,8 @@ public class Gameplay : MonoBehaviour
                 playerMaxDamage = Mathf.CeilToInt(gameStart.intelligence * 2);
                 playerDamage = Random.Range(playerMinDamage, playerMaxDamage);
                 displayText.dialogue = "You deal " + playerDamage + " damage to the goblin.";
-                enemyHealth -= playerDamage;
+                enemyCurrentHealth -= playerDamage;
+                displayText.enemyStats = "Goblin" + "\nLevel: " + enemyLevel + "\nHealth: " + enemyCurrentHealth + "/" + enemyMaxHealth + "\nStrength: " + enemyStrength + "\nDexterity: " + enemyDexterity;
                 StartCoroutine(EnemyHealthCheckWaiter());
             }
         }
@@ -143,7 +155,7 @@ public class Gameplay : MonoBehaviour
 
         void EnemyHealthCheck()
         {
-            if (enemyHealth <= 0)//Checks to see if enemy is dead to give exp or continue combat
+            if (enemyCurrentHealth <= 0)//Checks to see if enemy is dead to give exp or continue combat
             {
                 int goldGain = Random.Range(5, 20);
                 gameStart.gold += goldGain;
@@ -172,6 +184,13 @@ public class Gameplay : MonoBehaviour
             yield return new WaitForSecondsRealtime(2);
             xpManager.GivePlayerEXP();
         }
+    }
+    public void Wait()
+    {
+        displayText.dialogue = "You stand around, waiting for nothing";
+        displayText.bLText = "Move";
+        displayText.bMText = "";
+        displayText.bRText = "Wait";
     }
 
     public void RemoveListeners()//Removes lingering button functions to reassign them in other functions, probably could of done this easier but oh well

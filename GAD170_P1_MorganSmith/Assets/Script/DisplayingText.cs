@@ -5,13 +5,15 @@ using TMPro;
 
 public class DisplayingText : MonoBehaviour
 {
+    public TextMeshProUGUI enemyStatsText;
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI statText;
     public TextMeshProUGUI buttonLText;
     public TextMeshProUGUI buttonMText;
     public TextMeshProUGUI buttonRText;
     public string dialogue;
-    public string stats;
+    public string playerStats;
+    public string enemyStats;
     public string bLText;
     public string bMText;
     public string bRText;
@@ -25,7 +27,8 @@ public class DisplayingText : MonoBehaviour
     void Update()
     {
         dialogueText.text = dialogue;
-        statText.text = stats;
+        enemyStatsText.text = enemyStats;
+        statText.text = playerStats;
         buttonLText.text = bLText;
         buttonMText.text = bMText;
         buttonRText.text = bRText;

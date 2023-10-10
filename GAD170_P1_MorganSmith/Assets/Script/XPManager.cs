@@ -11,6 +11,7 @@ public class XPManager : MonoBehaviour
     public ButtonInput buttonInput;
     public void GivePlayerEXP()
     {
+        displayText.enemyStats = "";
         int alternateRoomCheck = Random.Range(0, 20);
         int gainedXP = Random.Range(1, (int)(gameStart.playerMaxExperience / 1.3f));//Rolls to give player exp
         gameStart.playerExperience += gainedXP;//Adds the gained xp to player's current xp count
@@ -20,7 +21,7 @@ public class XPManager : MonoBehaviour
         {
             StartCoroutine(PlayerLevelUpWaiter());
         }
-        else if (alternateRoomCheck > 15)
+        else if (alternateRoomCheck > 12)
         {
             StartCoroutine(AlternateRoomWaiter());
         }
@@ -78,7 +79,7 @@ public class XPManager : MonoBehaviour
         {
             int alternateRoomCheck = Random.Range(0, 20);
             gameStart.currentHealth = gameStart.maxHealth;//heals the player to full after a level for QoL sake
-            if (alternateRoomCheck > 15)
+            if (alternateRoomCheck > 12)
             {
                 roomManager.AlternateRooms();
             }
